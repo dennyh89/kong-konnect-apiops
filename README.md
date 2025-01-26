@@ -1,14 +1,14 @@
 # kong-konnect-apiops
-Kong Konnect APIOps
+
+## Setup konnect
+* Create Control plane named "training"
+* Create dataplane
 
 ## Connect deck to Konnect Cloud
 deck gateway ping \
   --konnect-control-plane-name="training" \
   --konnect-addr="https://eu.api.konghq.com" \
   --konnect-token="${KPAT}"
-
-## Run dataplane
-copy command from konnect
 
 ## Manual deck 
 
@@ -56,7 +56,7 @@ deck file validate  bu1/httpbin/.generated/5_with_namespace.yaml
 ### deck gateway sync
 
 ```
-deck gateay sync validate  bu1/httpbin/.generated/5_with_namespace.yaml
+deck --config .deck.yaml gateway sync  bu1/httpbin/.generated/5_with_namespace.yaml
 ```
 
 ## All together

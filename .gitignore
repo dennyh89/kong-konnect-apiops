@@ -1,3 +1,4 @@
 .envrc
 .deck.yaml
 .DS_Store
+**/.generated/**
