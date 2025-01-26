@@ -1,0 +1,96 @@
+_format_version: "3.0"
+plugins:
+- config:
+    add:
+      headers:
+      - 'Test: test'
+  enabled: true
+  name: response-transformer
+  tags:
+  - managed-by-deck
+services:
+- host: httpbin.org
+  id: 382433ac-c0f6-517e-b5ab-203c47fd7a9e
+  name: httpbin-org
+  path: /
+  plugins:
+  - config:
+      access:
+      - "local ns='/httpbin' -- this strips the '/httpbin' namespace from the path\nlocal
+        nst=ns:sub(-1,-1)=='/' and ns or (ns..'/')\nlocal function sn(u)\n\tlocal
+        s,e=u:find(nst,1,true)\n\tif s then\n\t\treturn u:sub(1,s)..u:sub(e+1,-1)\n\tend\n\tif
+        u:sub(-#ns,-1)==ns then\n\t\tu=u:sub(1,-#ns-1)\n\t\tif u=='' then u='/' end\n\tend\n\treturn
+        u\nend\nngx.var.upstream_uri=sn(ngx.var.upstream_uri)"
+    name: pre-function
+  port: 443
+  protocol: https
+  routes:
+  - id: 014df847-5a16-549d-8557-3e8b223a11e7
+    methods:
+    - GET
+    name: httpbin-org_get-delay-delay
+    paths:
+    - ~/httpbin/delay/(?<delay>[^#?/]+)$
+    plugins: []
+    regex_priority: 100
+    strip_path: false
+    tags:
+    - managed-by-deck
+  - id: 10c02002-c972-5bcf-8627-892b4293798c
+    methods:
+    - GET
+    name: httpbin-org_get-get
+    paths:
+    - ~/httpbin/get$
+    plugins: []
+    regex_priority: 200
+    strip_path: false
+    tags:
+    - managed-by-deck
+  - id: 8b4cbbb9-8180-5cba-8461-e38a435ad5b7
+    methods:
+    - GET
+    name: httpbin-org_get-headers
+    paths:
+    - ~/httpbin/headers$
+    plugins: []
+    regex_priority: 200
+    strip_path: false
+    tags:
+    - managed-by-deck
+  - id: 6a98c983-78bb-5725-878e-8a38efe3d000
+    methods:
+    - POST
+    name: httpbin-org_post-post
+    paths:
+    - ~/httpbin/post$
+    plugins: []
+    regex_priority: 200
+    strip_path: false
+    tags:
+    - managed-by-deck
+  - id: ae175177-ac5e-5880-a1dd-6be342c6c955
+    methods:
+    - PUT
+    name: httpbin-org_put-put
+    paths:
+    - ~/httpbin/put$
+    plugins: []
+    regex_priority: 200
+    strip_path: false
+    tags:
+    - managed-by-deck
+  - id: d97e98fd-6782-5148-b44b-da82d96f57a9
+    methods:
+    - GET
+    name: httpbin-org_get-status-codes
+    paths:
+    - ~/httpbin/status/(?<codes>[^#?/]+)$
+    plugins: []
+    regex_priority: 100
+    strip_path: false
+    tags:
+    - managed-by-deck
+  tags:
+  - managed-by-deck
+upstreams: []

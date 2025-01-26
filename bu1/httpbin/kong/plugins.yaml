@@ -1,0 +1,11 @@
+---
+_format_version: "3.0"
+add-plugins:
+  - overwrite: false
+    plugins:
+      - config:
+          add:
+            headers:
+              - "Test: test"
+        enabled: true
+        name: response-transformer

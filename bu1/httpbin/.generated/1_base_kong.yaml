@@ -1,0 +1,72 @@
+_format_version: "3.0"
+services:
+- host: httpbin.local
+  id: 382433ac-c0f6-517e-b5ab-203c47fd7a9e
+  name: httpbin-org
+  path: /
+  plugins: []
+  port: 443
+  protocol: https
+  routes:
+  - id: 014df847-5a16-549d-8557-3e8b223a11e7
+    methods:
+    - GET
+    name: httpbin-org_get-delay-delay
+    paths:
+    - ~/delay/(?<delay>[^#?/]+)$
+    plugins: []
+    regex_priority: 100
+    strip_path: false
+    tags: []
+  - id: 10c02002-c972-5bcf-8627-892b4293798c
+    methods:
+    - GET
+    name: httpbin-org_get-get
+    paths:
+    - ~/get$
+    plugins: []
+    regex_priority: 200
+    strip_path: false
+    tags: []
+  - id: 8b4cbbb9-8180-5cba-8461-e38a435ad5b7
+    methods:
+    - GET
+    name: httpbin-org_get-headers
+    paths:
+    - ~/headers$
+    plugins: []
+    regex_priority: 200
+    strip_path: false
+    tags: []
+  - id: 6a98c983-78bb-5725-878e-8a38efe3d000
+    methods:
+    - POST
+    name: httpbin-org_post-post
+    paths:
+    - ~/post$
+    plugins: []
+    regex_priority: 200
+    strip_path: false
+    tags: []
+  - id: ae175177-ac5e-5880-a1dd-6be342c6c955
+    methods:
+    - PUT
+    name: httpbin-org_put-put
+    paths:
+    - ~/put$
+    plugins: []
+    regex_priority: 200
+    strip_path: false
+    tags: []
+  - id: d97e98fd-6782-5148-b44b-da82d96f57a9
+    methods:
+    - GET
+    name: httpbin-org_get-status-codes
+    paths:
+    - ~/status/(?<codes>[^#?/]+)$
+    plugins: []
+    regex_priority: 100
+    strip_path: false
+    tags: []
+  tags: []
+upstreams: []
