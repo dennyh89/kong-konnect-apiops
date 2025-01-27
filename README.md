@@ -5,10 +5,16 @@
 * Create dataplane
 
 ## Connect deck to Konnect Cloud
+* use flags
+```
 deck gateway ping \
   --konnect-control-plane-name="training" \
   --konnect-addr="https://eu.api.konghq.com" \
   --konnect-token="${KPAT}"
+```
+* or config file:
+  * copy and modify .deck.yaml.template to .deck.yaml
+  * `deck --config .deck.yaml gateway ping`
 
 ## Manual deck 
 
