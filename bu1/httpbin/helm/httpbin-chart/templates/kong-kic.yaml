@@ -1,0 +1,162 @@
+apiVersion: configuration.konghq.com/v1
+config:
+  access:
+  - "local ns='/httpbin' -- this strips the '/httpbin' namespace from the path\nlocal
+    nst=ns:sub(-1,-1)=='/' and ns or (ns..'/')\nlocal function sn(u)\n\tlocal s,e=u:find(nst,1,true)\n\tif
+    s then\n\t\treturn u:sub(1,s)..u:sub(e+1,-1)\n\tend\n\tif u:sub(-#ns,-1)==ns then\n\t\tu=u:sub(1,-#ns-1)\n\t\tif
+    u=='' then u='/' end\n\tend\n\treturn u\nend\nngx.var.upstream_uri=sn(ngx.var.upstream_uri)"
+kind: KongPlugin
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: kong
+  name: httpbin-org-pre-function
+plugin: pre-function
+---
+apiVersion: configuration.konghq.com/v1
+config:
+  add:
+    headers:
+    - 'Test: {{ .Values.kong.customHeader }}'
+kind: KongClusterPlugin
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: kong
+  name: response-transformer
+plugin: response-transformer
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    konghq.com/regex-priority: "100"
+    konghq.com/strip-path: "false"
+  name: httpbin-org-httpbin-org-get-delay-delay
+spec:
+  parentRefs:
+  - name: kong
+  rules:
+  - backendRefs:
+    - name: httpbin-org
+      port: 443
+    matches:
+    - method: GET
+      path:
+        type: RegularExpression
+        value: /httpbin/delay/(?<delay>[^#?/]+)$
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    konghq.com/regex-priority: "200"
+    konghq.com/strip-path: "false"
+  name: httpbin-org-httpbin-org-get-get
+spec:
+  parentRefs:
+  - name: kong
+  rules:
+  - backendRefs:
+    - name: httpbin-org
+      port: 443
+    matches:
+    - method: GET
+      path:
+        type: RegularExpression
+        value: /httpbin/get$
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    konghq.com/regex-priority: "200"
+    konghq.com/strip-path: "false"
+  name: httpbin-org-httpbin-org-get-headers
+spec:
+  parentRefs:
+  - name: kong
+  rules:
+  - backendRefs:
+    - name: httpbin-org
+      port: 443
+    matches:
+    - method: GET
+      path:
+        type: RegularExpression
+        value: /httpbin/headers$
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    konghq.com/regex-priority: "200"
+    konghq.com/strip-path: "false"
+  name: httpbin-org-httpbin-org-post-post
+spec:
+  parentRefs:
+  - name: kong
+  rules:
+  - backendRefs:
+    - name: httpbin-org
+      port: 443
+    matches:
+    - method: POST
+      path:
+        type: RegularExpression
+        value: /httpbin/post$
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    konghq.com/regex-priority: "200"
+    konghq.com/strip-path: "false"
+  name: httpbin-org-httpbin-org-put-put
+spec:
+  parentRefs:
+  - name: kong
+  rules:
+  - backendRefs:
+    - name: httpbin-org
+      port: 443
+    matches:
+    - method: PUT
+      path:
+        type: RegularExpression
+        value: /httpbin/put$
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    konghq.com/regex-priority: "100"
+    konghq.com/strip-path: "false"
+  name: httpbin-org-httpbin-org-get-status-codes
+spec:
+  parentRefs:
+  - name: kong
+  rules:
+  - backendRefs:
+    - name: httpbin-org
+      port: 443
+    matches:
+    - method: GET
+      path:
+        type: RegularExpression
+        value: /httpbin/status/(?<codes>[^#?/]+)$
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    konghq.com/path: /
+    konghq.com/plugins: httpbin-org-pre-function
+    konghq.com/protocol: https
+  name: httpbin-org
+spec:
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app: httpbin-org
+---

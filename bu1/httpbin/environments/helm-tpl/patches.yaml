@@ -1,0 +1,10 @@
+---
+_format_version: "3.0"
+patches:
+  - selectors:
+      - "$..plugins[0]"
+    values:
+      config:
+        add:
+          headers:
+            - "Test: {{ .Values.kong.customHeader }}"
