@@ -4,4 +4,4 @@ patches:
   - selectors:
       - "$..services[*]"
     values:
-      host: httpbin.org
+      host: httpbin_dev

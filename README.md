@@ -20,7 +20,8 @@ deck gateway ping \
 
 ### oas to deck 
 ```
-deck file openapi2kong -s bu1/httpbin/oas.yaml >bu1/httpbin/.generated/1_base_kong.yaml
+deck file openapi2kong -s bu1/httpbin/oas.yaml > bu1/httpbin/.generated/1_base_kong.yaml
+cat bu1/httpbin/.generated/1_base_kong.yaml
 ```
 
 ### deck add-plugins
@@ -38,10 +39,8 @@ diff bu1/httpbin/.generated/2_with_plugins_kong.yaml bu1/httpbin/.generated/3_wi
 ```
 
 ### deck add-tags
-
-
 ```
-deck file add-tags -s bu1/httpbin/.generated/3_with_env_patch_kong.yaml -o bu1/httpbin/.generated/4_with_tags.yaml managed-by-deck
+deck file add-tags -s bu1/httpbin/.generated/3_with_env_patch_kong.yaml -o bu1/httpbin/.generated/4_with_tags.yaml managed-by-deck test1
 diff bu1/httpbin/.generated/3_with_env_patch_kong.yaml bu1/httpbin/.generated/4_with_tags.yaml
 ```
 
@@ -53,16 +52,23 @@ diff bu1/httpbin/.generated/4_with_tags.yaml bu1/httpbin/.generated/5_with_names
 
 ```
 
+### deck file merge to add upstreams
+```
+deck file merge -o bu1/httpbin/.generated/6_with_upstreams.yaml bu1/httpbin/.generated/5_with_namespace.yaml bu1/httpbin/environments/dev/upstreams.yaml
+
+diff bu1/httpbin/.generated/5_with_namespace.yaml bu1/httpbin/.generated/6_with_upstreams.yaml
+```
+
 ### deck file validate
 
 ```
-deck file validate  bu1/httpbin/.generated/5_with_namespace.yaml
+deck file validate  bu1/httpbin/.generated/6_with_upstreams.yaml
 ```
 
 ### deck gateway sync
 
 ```
-deck --config .deck.yaml gateway sync  bu1/httpbin/.generated/5_with_namespace.yaml
+deck --config .deck.yaml gateway sync  bu1/httpbin/.generated/6_with_upstreams.yaml
 ```
 
 ## All together
@@ -73,9 +79,13 @@ deck file add-plugins -s bu1/httpbin/.generated/1_base_kong.yaml -o bu1/httpbin/
 deck file patch -s bu1/httpbin/.generated/2_with_plugins_kong.yaml -o bu1/httpbin/.generated/3_with_env_patch_kong.yaml bu1/httpbin/environments/dev/patches.yaml
 deck file add-tags -s bu1/httpbin/.generated/3_with_env_patch_kong.yaml -o bu1/httpbin/.generated/4_with_tags.yaml managed-by-deck
 deck file namespace -s bu1/httpbin/.generated/4_with_tags.yaml -o bu1/httpbin/.generated/5_with_namespace.yaml --path-prefix=/httpbin
-deck file validate  bu1/httpbin/.generated/5_with_namespace.yaml
+deck file merge -o bu1/httpbin/.generated/6_with_upstreams.yaml bu1/httpbin/.generated/5_with_namespace.yaml bu1/httpbin/environments/dev/upstreams.yaml
+deck file validate  bu1/httpbin/.generated/6_with_upstreams.yaml
+deck --config .deck.yaml gateway sync  bu1/httpbin/.generated/6_with_upstreams.yaml
+
 ```
 ## Test httpbin
 
-`curl localhost:8000/httpbin/headers -H "myheader: test"`
-`curl localhost:8000/httpbin/delay/5 -H "myheader: test"`
+`curl localhost:8000/httpbin/get`
+to see response transformer header "Test: test"  `curl -v localhost:8000/httpbin/get`
+`curl localhost:8000/httpbin/delay/5`

@@ -1,0 +1,9 @@
+upstreams:
+  - algorithm: round-robin
+    name: httpbin_dev
+    targets:
+      - target: httpbin.konghq.com:443
+        weight: 100
+      - target: httpbin.org:443
+        weight: 100
+    use_srv_name: false
