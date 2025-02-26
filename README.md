@@ -87,5 +87,5 @@ deck --config .deck.yaml gateway sync  bu1/httpbin/.generated/6_with_upstreams.y
 ## Test httpbin
 
 `curl localhost:8000/httpbin/get`
-to see response transformer header "Test: test"  `curl -v localhost:8000/httpbin/get`
+to see response transformer header "Test: test"  `curl -i localhost:8000/httpbin/get`
 `curl localhost:8000/httpbin/delay/5`
