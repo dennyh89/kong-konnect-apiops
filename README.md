@@ -58,7 +58,9 @@ deck file validate  bu1/httpbin/.generated/5_with_namespace.yaml
 
 ### deck file kong2kic
 
+```
 deck file kong2kic -s bu1/httpbin/.generated/5_with_namespace.yaml -o bu1/httpbin/helm/httpbin-chart/templates/kong-kic.yaml
+```
 
 ### helm template
 
