@@ -71,6 +71,13 @@ deck file validate  bu1/httpbin/.generated/6_with_upstreams.yaml
 deck --config .deck.yaml gateway sync  bu1/httpbin/.generated/6_with_upstreams.yaml
 ```
 
+### deck file kong2kic sync
+
+```
+deck file kong2kic --class-name kong-external -s bu1/httpbin/.generated/6_with_upstreams.yaml > bu1/httpbin/.generated/7_gateway_api.yaml
+```
+From here, use kustomize to add any further customizations, such as adding a namespace to parentRefs in routes or similar.
+
 ## All together
 
 ```
