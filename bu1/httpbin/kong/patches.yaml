@@ -1,0 +1,7 @@
+---
+_format_version: "3.0"
+patches:
+  - selectors:
+      - "$..add-plugins[0].plugins[0]"
+    values:
+      enabled: false

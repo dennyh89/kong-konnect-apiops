@@ -89,10 +89,14 @@ deck file namespace -s bu1/httpbin/.generated/4_with_tags.yaml -o bu1/httpbin/.g
 deck file merge -o bu1/httpbin/.generated/6_with_upstreams.yaml bu1/httpbin/.generated/5_with_namespace.yaml bu1/httpbin/environments/dev/upstreams.yaml
 deck file validate  bu1/httpbin/.generated/6_with_upstreams.yaml
 deck --config .deck.yaml gateway sync  bu1/httpbin/.generated/6_with_upstreams.yaml
-
 ```
 ## Test httpbin
 
 `curl localhost:8000/httpbin/get`
 to see response transformer header "Test: test"  `curl -i localhost:8000/httpbin/get`
 `curl localhost:8000/httpbin/delay/5`
+
+## Patch plugins file
+```
+deck file patch -s bu1/httpbin/kong/plugins.yaml -o out.yaml bu1/httpbin/kong/patches.yaml
+```
